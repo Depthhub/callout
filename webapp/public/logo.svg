@@ -1,0 +1,18 @@
+<svg width="280" height="60" viewBox="0 0 280 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- NO Card (black with green border, tilted left) -->
+  <g transform="rotate(-15, 25, 30)">
+    <rect x="5" y="10" width="28" height="40" rx="4" fill="#000" stroke="#7FFF00" stroke-width="2"/>
+    <text x="19" y="35" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle">NO</text>
+  </g>
+  
+  <!-- YES Card (green, tilted right) -->
+  <g transform="rotate(10, 45, 30)">
+    <rect x="25" y="10" width="28" height="40" rx="4" fill="#7FFF00"/>
+    <text x="39" y="35" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#000" text-anchor="middle">YES</text>
+  </g>
+  
+  <!-- VOUCHEO Text -->
+  <text x="75" y="40" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#fff" letter-spacing="3">VOUCHEO</text>
+</svg>
+
+

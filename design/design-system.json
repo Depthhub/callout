@@ -1,0 +1,604 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "meta": {
+    "title": "PredictX Design System",
+    "version": "1.0.0",
+    "purpose": "Comprehensive design system guide for AI to follow when building new features in this prediction market mobile app. This document defines all visual tokens, component patterns, and implementation guidelines.",
+    "appType": "Mobile-first prediction market / P2P trading application",
+    "framework": {
+      "ui": "React 18+",
+      "styling": "Tailwind CSS with custom config",
+      "icons": "Lucide React (line icons, consistent stroke weight)",
+      "buildTool": "Vite"
+    },
+    "aesthetic": {
+      "theme": "Dark neon fintech",
+      "tone": ["confident", "tech-forward", "secure", "premium-minimal"],
+      "shapeLanguage": "Rounded rectangles with very high radii; chips and buttons are pill-like; cards float on dark canvas",
+      "personality": "Modern prediction market with crypto aesthetics - bold neon accents against deep blacks, trust-building visual language"
+    }
+  },
+
+  "designPrinciples": [
+    {
+      "principle": "Contrast-first hierarchy",
+      "description": "Use neon accents over deep blacks for clear visual hierarchy. Primary (#C8FF44) should pop against surfaces."
+    },
+    {
+      "principle": "Minimal but dense",
+      "description": "Focus on minimal text with strong iconography. Dense information with ample breathing room via vertical spacing."
+    },
+    {
+      "principle": "Soft geometry",
+      "description": "Consistent pill/rounded geometry to feel soft and approachable. Everything should feel tactile and pressable."
+    },
+    {
+      "principle": "Elevation through glow",
+      "description": "Use subtle glows and soft shadows to lift interactive elements. Neon glow for primary actions."
+    },
+    {
+      "principle": "Visual rhythm",
+      "description": "Maintain aligned grids and consistent padding. Use spacing scale religiously."
+    },
+    {
+      "principle": "Motion with purpose",
+      "description": "Animations should enhance understanding, not distract. Scale on press, slide for reveals, fade for state changes."
+    }
+  ],
+
+  "foundations": {
+    "colors": {
+      "semantic": {
+        "primary": {
+          "value": "#C8FF44",
+          "tailwind": "primary",
+          "usage": "Primary actions, accents, active states, brand elements, glows"
+        },
+        "primaryVariant": {
+          "value": "#B2F028",
+          "tailwind": "primary-variant",
+          "usage": "Darker primary for hover states or gradients"
+        },
+        "success": {
+          "value": "#5BEA7C",
+          "tailwind": "success",
+          "usage": "Positive values, 'Yes' bets, gains, confirmations"
+        },
+        "warning": {
+          "value": "#F2C94C",
+          "tailwind": "warning",
+          "usage": "Warnings, pending states, rewards"
+        },
+        "error": {
+          "value": "#FF5C5C",
+          "tailwind": "error",
+          "usage": "Negative values, 'No' bets, losses, destructive actions"
+        }
+      },
+      "surfaces": {
+        "surface": {
+          "value": "#0B0B0F",
+          "tailwind": "surface",
+          "usage": "Main app background, base layer"
+        },
+        "surfaceRaised": {
+          "value": "#13141A",
+          "tailwind": "surface-raised",
+          "usage": "Cards, elevated containers, modals"
+        },
+        "surfaceMuted": {
+          "value": "#1B1C23",
+          "tailwind": "surface-muted",
+          "usage": "Badges, chips, secondary buttons, input backgrounds"
+        },
+        "tabBar": {
+          "value": "#050506",
+          "tailwind": "tab-bar",
+          "usage": "Bottom navigation bar only"
+        },
+        "chartFill": {
+          "value": "#1E1F27",
+          "tailwind": "chart-fill",
+          "usage": "Chart backgrounds, graph areas"
+        }
+      },
+      "text": {
+        "textPrimary": {
+          "value": "#FFFFFF",
+          "tailwind": "text-primary",
+          "usage": "Main content, headings, important values"
+        },
+        "textSecondary": {
+          "value": "#C7CBD4",
+          "tailwind": "text-secondary",
+          "usage": "Supporting text, descriptions, inactive labels"
+        },
+        "textTertiary": {
+          "value": "#8E93A3",
+          "tailwind": "text-tertiary",
+          "usage": "Timestamps, hints, lowest priority text"
+        }
+      },
+      "borders": {
+        "borderSubtle": {
+          "value": "#1F2028",
+          "tailwind": "border-subtle",
+          "usage": "Card borders, dividers, input outlines"
+        }
+      },
+      "chart": {
+        "chartLine": {
+          "value": "#FFFFFF",
+          "tailwind": "chart-line",
+          "usage": "Primary chart line color"
+        }
+      }
+    },
+
+    "typography": {
+      "fontFamily": {
+        "primary": "Inter",
+        "fallback": ["SF Pro", "system-ui", "sans-serif"],
+        "tailwind": "font-sans"
+      },
+      "textStyles": {
+        "hero": {
+          "size": "32px",
+          "lineHeight": "1.2",
+          "weight": 700,
+          "tailwind": "text-hero",
+          "usage": "Main balance display, hero numbers"
+        },
+        "title": {
+          "size": "24px",
+          "lineHeight": "1.3",
+          "weight": 700,
+          "tailwind": "text-title",
+          "usage": "Section totals, large values"
+        },
+        "subtitle": {
+          "size": "18px",
+          "lineHeight": "1.4",
+          "weight": 600,
+          "tailwind": "text-subtitle",
+          "usage": "Section headers, component titles"
+        },
+        "body": {
+          "size": "16px",
+          "lineHeight": "1.5",
+          "weight": 400,
+          "tailwind": "text-body",
+          "usage": "Main content, questions, descriptions"
+        },
+        "bodySmall": {
+          "size": "14px",
+          "lineHeight": "1.5",
+          "weight": 400,
+          "tailwind": "text-body-small",
+          "usage": "Secondary content, values, CTA text"
+        },
+        "label": {
+          "size": "13px",
+          "lineHeight": "1.4",
+          "weight": 500,
+          "tailwind": "text-label",
+          "usage": "Form labels, emphasized small text"
+        },
+        "caption": {
+          "size": "12px",
+          "lineHeight": "1.4",
+          "weight": 400,
+          "tailwind": "text-caption",
+          "usage": "Timestamps, badges, metadata, smallest readable text"
+        }
+      },
+      "casing": {
+        "headings": "Sentence case",
+        "labels": "Title case or capitalize first letter",
+        "buttons": "Title case for single words, sentence case for phrases",
+        "badges": "Uppercase for short labels (e.g., 'HOT', 'LIVE')"
+      }
+    },
+
+    "spacing": {
+      "scale": {
+        "xxs": { "value": "4px", "tailwind": "xxs" },
+        "xs": { "value": "8px", "tailwind": "xs" },
+        "sm": { "value": "12px", "tailwind": "sm" },
+        "md": { "value": "16px", "tailwind": "md" },
+        "lg": { "value": "20px", "tailwind": "lg" },
+        "xl": { "value": "24px", "tailwind": "xl" },
+        "xxl": { "value": "32px", "tailwind": "xxl" }
+      },
+      "guidelines": {
+        "pagePadding": "px-lg (20px horizontal padding)",
+        "sectionSpacing": "pb-xl (24px between sections)",
+        "cardPadding": "p-md (16px internal padding)",
+        "inlineGap": "gap-xs (8px) for tight groups, gap-sm (12px) for standard groups"
+      }
+    },
+
+    "borderRadius": {
+      "pill": { "value": "999px", "tailwind": "rounded-pill", "usage": "Badges, chips, small buttons" },
+      "button": { "value": "18px", "tailwind": "rounded-button", "usage": "Standard buttons" },
+      "card": { "value": "24px", "tailwind": "rounded-card", "usage": "Cards, modals" },
+      "sheet": { "value": "28px", "tailwind": "rounded-sheet", "usage": "Bottom sheets, tab bar" }
+    },
+
+    "shadows": {
+      "card": {
+        "value": "0 12px 30px rgba(0,0,0,0.35)",
+        "tailwind": "shadow-card",
+        "usage": "Standard card elevation"
+      },
+      "floating": {
+        "value": "0 16px 40px rgba(0,0,0,0.45)",
+        "tailwind": "shadow-floating",
+        "usage": "Floating elements, modals, tab bar"
+      },
+      "glow": {
+        "value": "0 0 20px rgba(200, 255, 68, 0.3)",
+        "tailwind": "shadow-glow",
+        "usage": "Primary glow effect for accents"
+      }
+    },
+
+    "glowEffects": {
+      "glowPrimary": {
+        "css": "box-shadow: 0 0 20px rgba(200, 255, 68, 0.25), 0 0 40px rgba(200, 255, 68, 0.1)",
+        "tailwind": "glow-primary",
+        "usage": "Primary action buttons, active elements"
+      },
+      "glowSuccess": {
+        "css": "box-shadow: 0 0 15px rgba(91, 234, 124, 0.3)",
+        "tailwind": "glow-success",
+        "usage": "Success states, 'Yes' buttons on hover"
+      },
+      "glowError": {
+        "css": "box-shadow: 0 0 15px rgba(255, 92, 92, 0.3)",
+        "tailwind": "glow-error",
+        "usage": "Error states, 'No' buttons on hover"
+      }
+    },
+
+    "icons": {
+      "library": "lucide-react",
+      "style": "Line icons with consistent 2px stroke weight",
+      "sizes": {
+        "xs": { "size": 12, "usage": "Inline with caption text" },
+        "sm": { "size": 14, "usage": "Badges, small indicators" },
+        "md": { "size": 18, "usage": "Button icons, nav items" },
+        "lg": { "size": 20, "usage": "Quick action buttons" },
+        "xl": { "size": 24, "usage": "Tab bar action, hero icons" }
+      },
+      "colors": {
+        "onPrimary": "text-surface (dark on neon)",
+        "onSurface": "text-text-secondary or text-primary",
+        "active": "text-primary"
+      }
+    }
+  },
+
+  "animations": {
+    "keyframes": {
+      "fadeIn": {
+        "tailwind": "animate-fade-in",
+        "duration": "250ms",
+        "easing": "ease-out",
+        "usage": "Initial element appearance"
+      },
+      "slideUp": {
+        "tailwind": "animate-slide-up",
+        "duration": "300ms",
+        "easing": "cubic-bezier(0.34, 1.56, 0.64, 1)",
+        "usage": "Section entrance, cards appearing"
+      },
+      "pulseSoft": {
+        "tailwind": "animate-pulse-soft",
+        "duration": "2s infinite",
+        "usage": "Live indicators, current value dots"
+      }
+    },
+    "interactions": {
+      "buttonPress": {
+        "className": "btn-press",
+        "behavior": "scale(0.97) on :active, with 120ms transition",
+        "usage": "All tappable elements"
+      },
+      "shimmer": {
+        "className": "shimmer",
+        "usage": "Loading skeleton states"
+      }
+    },
+    "staggering": {
+      "pattern": "Use style={{ animationDelay: `${index * 30}ms` }} for list items",
+      "classes": ["stagger-1", "stagger-2", "stagger-3", "stagger-4", "stagger-5"],
+      "delays": ["50ms", "100ms", "150ms", "200ms", "250ms"]
+    },
+    "guidelines": {
+      "entrances": "Use animate-slide-up with staggered delays for sections",
+      "hovers": "Scale 1.05 for icons, translate for arrows, color transitions",
+      "focus": "subtle glow or primary outline"
+    }
+  },
+
+  "components": {
+    "buttons": {
+      "primary": {
+        "classes": "btn-press bg-primary text-surface font-semibold rounded-pill shadow-card glow-primary hover:scale-105 transition-all",
+        "height": "56px standard, 44px compact",
+        "usage": "Main CTAs, primary actions"
+      },
+      "secondary": {
+        "classes": "btn-press bg-surface-muted text-text-primary border border-border-subtle rounded-pill hover:bg-surface-raised transition-colors",
+        "usage": "Secondary actions, alternative options"
+      },
+      "ghost": {
+        "classes": "btn-press text-text-secondary hover:text-text-primary transition-colors",
+        "usage": "Tertiary actions, links"
+      },
+      "success": {
+        "classes": "btn-press bg-success/15 text-success border border-success/20 rounded-button hover:bg-success/25 transition-all",
+        "usage": "'Yes' bet buttons"
+      },
+      "error": {
+        "classes": "btn-press bg-error/15 text-error border border-error/20 rounded-button hover:bg-error/25 transition-all",
+        "usage": "'No' bet buttons"
+      },
+      "iconButton": {
+        "classes": "btn-press w-9 h-9 rounded-full flex items-center justify-center hover:bg-surface-muted transition-colors",
+        "usage": "Nav actions, close buttons"
+      },
+      "quickAction": {
+        "classes": "btn-press w-14 h-14 rounded-full flex items-center justify-center shadow-card group-hover:scale-105 transition-all",
+        "usage": "Quick action grid buttons"
+      }
+    },
+
+    "cards": {
+      "standard": {
+        "classes": "bg-surface-raised rounded-card p-md shadow-card border border-border-subtle/50",
+        "hover": "hover:shadow-floating hover:border-primary/30 transition-all",
+        "usage": "Market cards, content cards"
+      },
+      "notification": {
+        "classes": "bg-gradient-to-r from-surface-muted to-surface-raised rounded-card p-md border border-border-subtle/50",
+        "accent": "Primary color bar on left edge",
+        "usage": "Alert cards, promotional content"
+      },
+      "summary": {
+        "classes": "bg-gradient-to-br from-surface-muted to-surface-raised rounded-card border border-border-subtle overflow-hidden relative",
+        "decoration": "Blurred primary circle in corner for depth",
+        "usage": "Total summaries, aggregated stats"
+      }
+    },
+
+    "badges": {
+      "category": {
+        "classes": "px-sm py-xxs bg-surface-muted rounded-pill text-caption text-text-secondary font-medium border border-border-subtle/50",
+        "usage": "Category labels on cards"
+      },
+      "status": {
+        "hot": "px-xs py-0.5 bg-primary/10 rounded-pill text-[10px] font-semibold text-primary uppercase",
+        "live": "px-xs py-0.5 bg-success/10 rounded-pill text-[10px] text-success font-medium uppercase",
+        "usage": "Status indicators, trending markers"
+      },
+      "value": {
+        "positive": "text-success font-semibold",
+        "negative": "text-error font-semibold",
+        "usage": "Price changes, P&L values"
+      },
+      "position": {
+        "yes": "px-1.5 py-0.5 rounded bg-success/15 text-success text-caption font-semibold",
+        "no": "px-1.5 py-0.5 rounded bg-error/15 text-error text-caption font-semibold",
+        "usage": "Position type indicators"
+      }
+    },
+
+    "inputs": {
+      "standard": {
+        "classes": "w-full bg-surface-muted border border-border-subtle rounded-button px-md py-sm text-body text-text-primary placeholder:text-text-tertiary focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary/30 transition-colors",
+        "usage": "Text inputs, search fields"
+      },
+      "dropdown": {
+        "classes": "btn-press flex items-center gap-1 bg-surface-muted hover:bg-surface-raised px-sm py-xxs rounded-pill transition-colors border border-border-subtle/50",
+        "usage": "Currency selectors, filter dropdowns"
+      }
+    },
+
+    "navigation": {
+      "topNav": {
+        "classes": "flex items-center justify-between px-lg py-md sticky top-0 z-50 bg-surface/90 backdrop-blur-xl border-b border-border-subtle/30",
+        "usage": "Main app header"
+      },
+      "tabBar": {
+        "container": "fixed bottom-4 left-1/2 -translate-x-1/2 w-[calc(100%-32px)] max-w-[396px] bg-tab-bar/98 backdrop-blur-2xl rounded-sheet shadow-floating border border-border-subtle/20 z-50",
+        "item": "flex flex-col items-center gap-0.5 px-3 py-1",
+        "active": "text-primary scale-110",
+        "inactive": "text-text-secondary",
+        "actionButton": "-mt-7 w-14 h-14 bg-primary rounded-full glow-primary",
+        "usage": "Bottom tab navigation"
+      },
+      "sectionHeader": {
+        "classes": "flex items-center justify-between mb-md",
+        "icon": "w-6 h-6 rounded-lg bg-primary/20 flex items-center justify-center",
+        "title": "text-subtitle font-bold",
+        "action": "text-body-small text-primary font-semibold",
+        "usage": "Section titles with 'See all' links"
+      }
+    },
+
+    "charts": {
+      "miniLine": {
+        "container": "h-14 bg-chart-fill rounded-xl overflow-hidden border border-border-subtle/30",
+        "line": "stroke: #C8FF44, strokeWidth: 2",
+        "fill": "linearGradient from primary/25 to primary/0",
+        "dot": "fill: #C8FF44 with glow filter",
+        "usage": "Portfolio value chart, sparklines"
+      },
+      "probabilityBar": {
+        "container": "h-2.5 bg-error/30 rounded-pill overflow-hidden flex",
+        "fill": "bg-gradient-to-r from-success to-success/80",
+        "usage": "Yes/No probability visualization"
+      }
+    },
+
+    "lists": {
+      "positionRow": {
+        "container": "btn-press flex items-center gap-sm p-sm bg-surface-raised rounded-xl border hover:border-opacity-60 transition-all cursor-pointer",
+        "icon": "w-10 h-10 rounded-xl flex items-center justify-center",
+        "usage": "Position list items, asset rows"
+      }
+    },
+
+    "indicators": {
+      "notificationDot": {
+        "classes": "absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-primary rounded-full ring-2 ring-surface animate-pulse",
+        "usage": "Unread notifications"
+      },
+      "activeTab": {
+        "classes": "absolute -top-1.5 w-4 h-0.5 bg-primary rounded-full",
+        "usage": "Current tab indicator"
+      },
+      "liveDot": {
+        "classes": "w-1.5 h-1.5 bg-success rounded-full animate-pulse",
+        "usage": "Live data indicator"
+      }
+    },
+
+    "avatar": {
+      "user": {
+        "classes": "w-9 h-9 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/30 flex items-center justify-center",
+        "initials": "text-caption font-bold text-primary",
+        "usage": "User avatar in nav"
+      }
+    },
+
+    "modals": {
+      "backdrop": "fixed inset-0 bg-surface/80 backdrop-blur-sm z-50",
+      "container": "fixed bottom-0 left-0 right-0 bg-surface-raised rounded-t-sheet p-xl shadow-floating z-50 animate-slide-up",
+      "usage": "Bottom sheets, dialogs"
+    }
+  },
+
+  "layout": {
+    "appContainer": {
+      "classes": "min-h-screen bg-ambient bg-grid text-text-primary font-sans",
+      "background": {
+        "ambient": "Radial gradients with primary color at low opacity creating subtle glow",
+        "grid": "40x40px grid pattern in primary/2%"
+      }
+    },
+    "mobileContainer": {
+      "classes": "max-w-[428px] mx-auto relative min-h-screen flex flex-col",
+      "maxWidth": "428px (iPhone 14 Pro Max width)",
+      "usage": "Centers content for mobile-first design"
+    },
+    "scrollableContent": {
+      "classes": "flex-1 overflow-y-auto pb-28 px-lg",
+      "paddingBottom": "pb-28 to account for floating tab bar"
+    }
+  },
+
+  "patterns": {
+    "valueDisplay": {
+      "large": {
+        "example": "$12,847.32",
+        "pattern": "Whole number in text-primary, decimals in text-secondary"
+      },
+      "change": {
+        "positive": "text-success with + prefix",
+        "negative": "text-error (no prefix needed)",
+        "container": "bg-{color}/10 or bg-{color}/15 rounded-pill"
+      }
+    },
+    "priceDisplay": {
+      "cents": "Display as '67¢' not '$0.67'",
+      "color": "success for yes prices, error for no prices"
+    },
+    "sectionPattern": {
+      "structure": [
+        "Section header with icon + title + 'See all' link",
+        "Content (cards/list)",
+        "Optional summary card at bottom"
+      ],
+      "spacing": "pb-xl between sections, mb-md after header"
+    },
+    "cardInteraction": {
+      "hover": "Shadow increases, subtle border color change to primary",
+      "press": "Scale 0.97",
+      "clickable": "Add cursor-pointer and btn-press class"
+    }
+  },
+
+  "aiGuidelines": {
+    "newFeatures": {
+      "1_understand": "Before building, review existing components in src/components/ to understand patterns",
+      "2_tokens": "Use design tokens from tailwind.config.js - never use raw color values",
+      "3_consistency": "Match spacing, typography, and border radius with existing components",
+      "4_animation": "Add animate-slide-up or animate-fade-in with stagger delays for new sections",
+      "5_interaction": "Include btn-press class on all tappable elements",
+      "6_accessibility": "Maintain 48px minimum touch targets, sufficient color contrast"
+    },
+    "doNot": [
+      "Use colors outside the defined palette",
+      "Create sharp corners - everything should be rounded",
+      "Use font sizes outside the defined scale",
+      "Create dense layouts without breathing room",
+      "Forget hover and active states",
+      "Use light backgrounds - this is a dark theme app",
+      "Add borders without /50 opacity or using borderSubtle",
+      "Create buttons without the btn-press class"
+    ],
+    "mustDo": [
+      "Use semantic color names (success, error, primary) not raw hex",
+      "Apply consistent card patterns with rounded-card and shadow-card",
+      "Include glow effects on primary action buttons",
+      "Use the defined spacing scale (xxs through xxl)",
+      "Animate entrance of new content",
+      "Include hover states with color/scale transitions",
+      "Follow mobile-first responsive patterns (max-w-[428px])",
+      "Use lucide-react icons with consistent sizing"
+    ],
+    "checklist": [
+      "✓ Using Tailwind classes from config (not arbitrary values)",
+      "✓ Colors match semantic palette",
+      "✓ Typography uses defined text-* classes",
+      "✓ Spacing uses defined spacing scale",
+      "✓ Border radius uses rounded-{pill|button|card|sheet}",
+      "✓ Shadows use shadow-{card|floating|glow}",
+      "✓ Animations included for entrance",
+      "✓ Hover and active states defined",
+      "✓ btn-press on interactive elements",
+      "✓ Icons from lucide-react with correct sizes"
+    ]
+  },
+
+  "contentGuidelines": {
+    "voice": "Direct, concise, trust-building. No fluff.",
+    "labels": "1-2 words maximum. Capitalize first letter only.",
+    "numbers": {
+      "currency": "Show $ prefix, use commas for thousands",
+      "percentages": "Always include + or - prefix",
+      "probability": "Display as cents (67¢) not decimals"
+    },
+    "actions": {
+      "primary": "Action-oriented verbs: 'Buy', 'Sell', 'Create'",
+      "links": "'See all', 'View all' with chevron icon"
+    }
+  },
+
+  "accessibility": {
+    "touchTargets": "48px minimum for all interactive elements",
+    "contrast": {
+      "text": "Maintain WCAG AA for text on dark surfaces",
+      "primary": "Reserve neon primary for accents, not body text"
+    },
+    "focus": "Use subtle glows or primary outlines on focusable elements",
+    "motion": "Respect prefers-reduced-motion for animations"
+  }
+}
+
+
+
+

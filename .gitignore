@@ -1,0 +1,66 @@
+# Dependencies
+node_modules/
+.pnp/
+.pnp.js
+
+# Environment files - NEVER COMMIT THESE
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+.env*
+!.env.example
+
+# Private keys and secrets - NEVER COMMIT
+*.pem
+*.key
+*.secret
+secrets/
+.secrets/
+
+# Build outputs
+.next/
+out/
+dist/
+build/
+.turbo/
+
+# Contract artifacts that may contain deployment info
+contracts/cache/
+contracts/artifacts/
+contracts/typechain-types/
+contracts/deployments/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Testing
+coverage/
+.nyc_output/
+
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+
+# Misc
+*.log
+.cache/
+

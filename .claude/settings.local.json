@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run dev:*)",
+      "Bash(timeout:*)",
+      "Bash(start http://localhost:3001)",
+      "Bash(ping:*)",
+      "Bash(start:*)",
+      "Bash(npx tsc:*)",
+      "Bash(curl:*)",
+      "Bash(dir \"C:\\\\Users\\\\user\\\\callout\\\\contracts\\\\contracts\")",
+      "Bash(powershell -Command \"Get-ChildItem -Path ''C:\\\\Users\\\\user\\\\callout\\\\contracts\\\\contracts'' -Filter ''*.sol''\")",
+      "Bash(dir /s \"C:\\\\Users\\\\user\\\\callout\")",
+      "Bash(findstr:*)",
+      "Bash(cat:*)",
+      "Bash(ls:*)",
+      "Bash(powershell -Command \"Get-ChildItem -Path ''C:\\\\Users\\\\user\\\\callout\\\\bot\\\\src'' -Recurse -Filter ''*.*''\")",
+      "Bash(powershell -Command:*)",
+      "Bash(dir:*)",
+      "Bash(npm install:*)",
+      "Bash(more)",
+      "Bash(copy \"C:\\\\Users\\\\user\\\\Downloads\\\\Voucheo \\(4\\).png\" \"C:\\\\Users\\\\user\\\\callout\\\\webapp\\\\public\\\\logo.png\" /Y)"
+    ]
+  }
+}
