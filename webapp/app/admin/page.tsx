@@ -2,10 +2,10 @@
 
 import { useState } from 'react'
 import { useAccount } from 'wagmi'
-import { Shield, CheckCircle, XCircle, Clock, ExternalLink, AlertTriangle } from 'lucide-react'
+import { Shield, CheckCircle, XCircle, Clock, ExternalLink, AlertTriangle, DollarSign } from 'lucide-react'
 import { Header } from '../components/Header'
 import { useMarkets, Market } from '../context/MarketsContext'
-import { useResolveMarket } from '../hooks/useContract'
+import { useResolveMarket, usePlatformFees, useWithdrawFees } from '../hooks/useContract'
 
 // Admin wallet address - only this wallet can access and use the admin panel
 const ADMIN_ADDRESS = process.env.NEXT_PUBLIC_ADMIN_ADDRESS || '0xEC611cd89b2C2f713e219f706Cf0A93B94114854'
@@ -14,6 +14,8 @@ export default function AdminPage() {
   const { address, isConnected } = useAccount()
   const { markets, resolveMarket: resolveMarketLocal } = useMarkets()
   const { resolveMarket: resolveMarketOnChain, isPending: isResolvingOnChain } = useResolveMarket()
+  const { feePercent, accumulatedFees, refetchFees } = usePlatformFees()
+  const { withdrawFees, isPending: isWithdrawing, isSuccess: withdrawSuccess } = useWithdrawFees()
   const [resolving, setResolving] = useState<number | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
@@ -43,6 +45,20 @@ export default function AdminPage() {
       setError(err instanceof Error ? err.message : 'Failed to resolve market')
     } finally {
       setResolving(null)
+    }
+  }
+
+  const handleWithdrawFees = async () => {
+    if (!address) return
+    setError(null)
+    setSuccess(null)
+
+    try {
+      await withdrawFees(address)
+      await refetchFees()
+      setSuccess(`Successfully withdrew ${accumulatedFees} USDC in fees!`)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to withdraw fees')
     }
   }
 
@@ -111,6 +127,56 @@ export default function AdminPage() {
             {success}
           </div>
         )}
+
+        {/* Platform Fees Card */}
+        <div className="card" style={{ marginBottom: '16px', background: 'linear-gradient(135deg, rgba(200, 255, 68, 0.1), rgba(200, 255, 68, 0.05))' }}>
+          <div className="card-body">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+              <DollarSign size={18} color="var(--primary)" />
+              <h3 style={{ fontWeight: '600', fontSize: '14px', margin: 0 }}>Platform Fees</h3>
+            </div>
+            
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+              <div>
+                <div style={{ fontSize: '12px', color: 'var(--text-tertiary)', marginBottom: '4px' }}>
+                  Accumulated Fees
+                </div>
+                <div style={{ fontSize: '24px', fontWeight: '700', color: 'var(--primary)' }}>
+                  {parseFloat(accumulatedFees).toFixed(2)} USDC
+                </div>
+              </div>
+              <div style={{ textAlign: 'right' }}>
+                <div style={{ fontSize: '12px', color: 'var(--text-tertiary)', marginBottom: '4px' }}>
+                  Fee Rate
+                </div>
+                <div style={{ fontSize: '16px', fontWeight: '600' }}>
+                  {feePercent}%
+                </div>
+              </div>
+            </div>
+
+            {parseFloat(accumulatedFees) > 0 ? (
+              <button
+                className="btn btn-primary btn-full btn-press"
+                onClick={handleWithdrawFees}
+                disabled={isWithdrawing}
+              >
+                {isWithdrawing ? 'Withdrawing...' : `Collect ${accumulatedFees} USDC`}
+              </button>
+            ) : (
+              <div style={{ 
+                textAlign: 'center', 
+                padding: '12px', 
+                background: 'var(--bg-secondary)', 
+                borderRadius: '8px',
+                fontSize: '13px',
+                color: 'var(--text-tertiary)'
+              }}>
+                No fees accumulated yet
+              </div>
+            )}
+          </div>
+        </div>
 
         {/* Reset Demo Data Button */}
         <button
