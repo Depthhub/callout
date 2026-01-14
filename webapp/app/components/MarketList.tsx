@@ -1,23 +1,44 @@
 'use client'
 
 import Link from 'next/link'
-import { PostPreviewCard } from './PostPreviewCard'
-import { useMarkets, Market } from '../context/MarketsContext'
+import { useMarketsList, OnChainMarket } from '../hooks/useMarketsList'
 
-// Re-export Market type for compatibility
-export type { Market } from '../context/MarketsContext'
+// Export Market type for compatibility
+export type Market = OnChainMarket
 
 interface MarketListProps {
   filter: 'open' | 'resolved'
 }
 
 export function MarketList({ filter }: MarketListProps) {
-  const { markets } = useMarkets()
+  const { markets, isLoading, contractConfigured } = useMarketsList()
   
   const filteredMarkets = markets.filter(m => {
-    if (filter === 'open') return m.status === 'open'
+    if (filter === 'open') return m.status === 'open' || m.status === 'locked'
     return m.status === 'resolved'
   })
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="empty-state">
+        <div className="empty-icon">⏳</div>
+        <div className="empty-title">Loading markets...</div>
+        <div className="empty-text">Fetching from Base Sepolia blockchain</div>
+      </div>
+    )
+  }
+
+  // Show message if contract not configured
+  if (!contractConfigured) {
+    return (
+      <div className="empty-state">
+        <div className="empty-icon">⚙️</div>
+        <div className="empty-title">Contract not configured</div>
+        <div className="empty-text">Smart contract address not set</div>
+      </div>
+    )
+  }
 
   if (filteredMarkets.length === 0) {
     return (
@@ -49,7 +70,7 @@ export function MarketCard({ market, index = 0 }: { market: Market; index?: numb
 
   const formatPool = (n: number) => {
     if (n >= 1000) return `${(n / 1000).toFixed(1)}K`
-    return n.toString()
+    return n.toFixed(2)
   }
 
   const timeLeft = market.deadline - Date.now()
@@ -78,22 +99,12 @@ export function MarketCard({ market, index = 0 }: { market: Market; index?: numb
   return (
     <Link href={`/market/${market.id}`} style={{ textDecoration: 'none' }}>
       <div className="card market-card btn-press animate-slide-up" style={{ animationDelay: `${Math.min(index, 4) * 50}ms` }}>
-        {/* Post Preview Section */}
-        <PostPreviewCard
-          postUrl={market.postUrl}
-          authorHandle={market.authorHandle}
-          postText={market.postText}
-          postedAt={market.postedAt}
-          platform={market.platform}
-          compact
-        />
-
         <div className="card-body">
           {/* Status */}
           <div className={`market-status ${market.status}`}>
             {market.status === 'open' && '🟢 OPEN'}
-            {market.status === 'locked' && '🔒 LOCKED'}
-            {market.status === 'resolved' && (market.outcomeYes ? '✅ YES' : '❌ NO')}
+            {market.status === 'locked' && '🔒 AWAITING RESOLUTION'}
+            {market.status === 'resolved' && (market.outcomeYes ? '✅ YES WON' : '❌ NO WON')}
           </div>
 
           {/* Question */}
@@ -102,7 +113,7 @@ export function MarketCard({ market, index = 0 }: { market: Market; index?: numb
           {/* Meta */}
           <div className="market-meta">
             <span>💰 {formatPool(totalPool)} USDC</span>
-            {market.status === 'open' && (
+            {(market.status === 'open' || market.status === 'locked') && (
               <span style={{ color: isExpired ? 'var(--warning)' : 'inherit' }}>
                 ⏰ {timeLeftDisplay}
               </span>

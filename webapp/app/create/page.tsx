@@ -1,12 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAccount, useConnect } from 'wagmi'
 import { Header } from '../components/Header'
 import { BottomNav } from '../components/BottomNav'
 import { PostPreviewCard } from '../components/PostPreviewCard'
-import { useMarkets } from '../context/MarketsContext'
+import { useCreateMarket } from '../hooks/useContract'
 import Link from 'next/link'
 
 export type Platform = 'base' | 'twitter'
@@ -15,7 +15,7 @@ export default function CreateMarket() {
   const router = useRouter()
   const { address, isConnected } = useAccount()
   const { connect, connectors } = useConnect()
-  const { addMarket } = useMarkets()
+  const { createMarket, isPending, isSuccess, hash } = useCreateMarket()
 
   const [platform, setPlatform] = useState<Platform>('base')
   const [postUrl, setPostUrl] = useState('')
@@ -33,28 +33,28 @@ export default function CreateMarket() {
 
   const isValid = postUrl.length > 0 && authorHandle.length > 0 && postText.length > 0 && question.length > 0 && deadline && parseFloat(initialStake) >= 1
 
+  // Watch for successful transaction
+  useEffect(() => {
+    if (isSuccess && hash) {
+      setStep('success')
+      setIsSubmitting(false)
+    }
+  }, [isSuccess, hash])
+
   const handleSubmit = async () => {
     if (!isValid || !isConnected) return
     
     setIsSubmitting(true)
-    await new Promise(resolve => setTimeout(resolve, 1500))
     
-    // Add market to context (this also creates the creator's bet)
-    const newMarketId = addMarket({
-      question,
-      postUrl,
-      authorHandle,
-      postText,
-      postedAt: postedAt || 'Just now',
-      deadline: new Date(deadline).getTime(),
-      initialStake: parseFloat(initialStake),
-      creatorAddress: address,
-      platform,
-    })
-    
-    setCreatedMarketId(newMarketId)
-    setStep('success')
-    setIsSubmitting(false)
+    try {
+      // Create market on-chain via smart contract
+      const deadlineTimestamp = new Date(deadline).getTime()
+      await createMarket(question, deadlineTimestamp)
+      // Transaction submitted - useEffect will handle success
+    } catch (error) {
+      console.error('Failed to create market:', error)
+      setIsSubmitting(false)
+    }
   }
 
   if (!isConnected) {
