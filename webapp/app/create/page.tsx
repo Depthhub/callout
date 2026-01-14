@@ -93,7 +93,7 @@ export default function CreateMarket() {
             <div className="empty-icon">✅</div>
             <div className="empty-title">Market Created!</div>
             <div className="empty-text">
-              Your market is now live. Share it to get others to bet.
+              Your market is now live on Base Sepolia. Check the home page to see it!
             </div>
 
             <div className="share-card" style={{ textAlign: 'left', marginBottom: '24px' }}>
@@ -103,27 +103,24 @@ export default function CreateMarket() {
               </div>
               <div className="share-card-question">{question}</div>
               <div className="odds-bar" style={{ height: '32px', marginBottom: '12px' }}>
-                <div className="odds-yes" style={{ width: '50%' }}>YES 50%</div>
-                <div className="odds-no" style={{ width: '50%' }}>NO 50%</div>
+                <div className="odds-yes" style={{ width: '100%' }}>YES 100%</div>
               </div>
               <div className="share-card-stats">
-                <span>💰 {initialStake} USDC</span>
-                <span>⏰ {new Date(deadline).toLocaleDateString()}</span>
+                <span>⏰ Deadline: {new Date(deadline).toLocaleDateString()}</span>
               </div>
             </div>
 
             <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
-              <Link href={`/market/${createdMarketId}`} className="btn btn-primary">
-                View Market
+              <Link href="/" className="btn btn-primary">
+                View All Markets
               </Link>
-              <button 
-                className="btn btn-secondary btn-press"
-                onClick={() => {
-                  navigator.clipboard.writeText(`https://voucheo.app/market/${createdMarketId}`)
-                }}
-              >
-                📋 Copy Link
-              </button>
+              <Link href="/create" className="btn btn-secondary" onClick={() => {
+                setStep('form')
+                setQuestion('')
+                setDeadline('')
+              }}>
+                Create Another
+              </Link>
             </div>
           </div>
         </main>
