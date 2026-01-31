@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
@@ -31,7 +31,16 @@ export default function CreateMarket() {
 
   const minDate = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split('T')[0]
 
-  const isValid = postUrl.length > 0 && authorHandle.length > 0 && postText.length > 0 && question.length > 0 && deadline && parseFloat(initialStake) >= 1
+  // Validate each field separately
+  const hasPostUrl = postUrl.trim().length > 0
+  const hasAuthor = authorHandle.trim().length > 0
+  const hasPostText = postText.trim().length > 0
+  const hasQuestion = question.trim().length > 0
+  const hasDeadline = deadline.length > 0
+  const stakeAmount = parseFloat(initialStake) || 0
+  const hasValidStake = stakeAmount >= 1
+
+  const isValid = hasPostUrl && hasAuthor && hasPostText && hasQuestion && hasDeadline && hasValidStake
 
   // Watch for successful transaction
   useEffect(() => {
@@ -63,12 +72,12 @@ export default function CreateMarket() {
         <Header />
         <main className="app-content with-bottom-nav">
           <div className="page-header">
-            <Link href="/" className="back-btn">←</Link>
+            <Link href="/" className="back-btn">â†</Link>
             <h1 className="page-title">Create Market</h1>
           </div>
 
           <div className="empty-state">
-            <div className="empty-icon">🔐</div>
+            <div className="empty-icon">ðŸ”</div>
             <div className="empty-title">Connect Wallet</div>
             <div className="empty-text">Connect your Base wallet to create a market.</div>
             <button 
@@ -90,7 +99,7 @@ export default function CreateMarket() {
         <Header />
         <main className="app-content with-bottom-nav">
           <div className="empty-state">
-            <div className="empty-icon">✅</div>
+            <div className="empty-icon">âœ…</div>
             <div className="empty-title">Market Created!</div>
             <div className="empty-text">
               Your market is now live on Base Sepolia. Check the home page to see it!
@@ -98,7 +107,7 @@ export default function CreateMarket() {
 
             <div className="share-card" style={{ textAlign: 'left', marginBottom: '24px' }}>
               <div className="share-card-header">
-                <span>📝</span>
+                <span>ðŸ“</span>
                 <span>VOUCHEO</span>
               </div>
               <div className="share-card-question">{question}</div>
@@ -106,7 +115,7 @@ export default function CreateMarket() {
                 <div className="odds-yes" style={{ width: '100%' }}>YES 100%</div>
               </div>
               <div className="share-card-stats">
-                <span>⏰ Deadline: {new Date(deadline).toLocaleDateString()}</span>
+                <span>â° Deadline: {new Date(deadline).toLocaleDateString()}</span>
               </div>
             </div>
 
@@ -135,7 +144,7 @@ export default function CreateMarket() {
       
       <main className="app-content with-bottom-nav">
         <div className="page-header">
-          <Link href="/" className="back-btn">←</Link>
+          <Link href="/" className="back-btn">â†</Link>
           <h1 className="page-title">Create Market</h1>
         </div>
 
@@ -150,7 +159,7 @@ export default function CreateMarket() {
                   className={`platform-option btn-press ${platform === 'base' ? 'active' : ''}`}
                   onClick={() => setPlatform('base')}
                 >
-                  <span className="platform-icon">🔵</span>
+                  <span className="platform-icon">ðŸ”µ</span>
                   <span>Base</span>
                 </button>
                 <button
@@ -158,7 +167,7 @@ export default function CreateMarket() {
                   className={`platform-option btn-press ${platform === 'twitter' ? 'active' : ''}`}
                   onClick={() => setPlatform('twitter')}
                 >
-                  <span className="platform-icon">𝕏</span>
+                  <span className="platform-icon">ð•</span>
                   <span>Twitter</span>
                 </button>
               </div>
@@ -292,12 +301,12 @@ export default function CreateMarket() {
 
             <div className="card" style={{ marginBottom: '20px' }}>
               <div className="card-body">
-                <div className="market-status open">🟢 Preview</div>
+                <div className="market-status open">ðŸŸ¢ Preview</div>
                 <h3 className="market-question">{question}</h3>
 
                 <div className="market-meta">
-                  <span>💰 {initialStake} USDC</span>
-                  <span>⏰ {new Date(deadline).toLocaleDateString()}</span>
+                  <span>ðŸ’° {initialStake} USDC</span>
+                  <span>â° {new Date(deadline).toLocaleDateString()}</span>
                 </div>
 
                 <div className="odds-bar">
@@ -336,7 +345,7 @@ export default function CreateMarket() {
                 onClick={() => setStep('form')}
                 style={{ flex: 1 }}
               >
-                ← Edit
+                â† Edit
               </button>
               <button
                 className="btn btn-primary btn-press"
@@ -355,4 +364,6 @@ export default function CreateMarket() {
     </div>
   )
 }
+
+
 
