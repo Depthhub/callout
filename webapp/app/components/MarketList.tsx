@@ -11,7 +11,7 @@ interface MarketListProps {
 }
 
 export function MarketList({ filter }: MarketListProps) {
-  const { markets, isLoading, contractConfigured } = useMarketsList()
+  const { markets, isLoading, error, contractConfigured, marketCount, refetch } = useMarketsList()
   
   const filteredMarkets = markets.filter(m => {
     if (filter === 'open') return m.status === 'open' || m.status === 'locked'
@@ -29,13 +29,35 @@ export function MarketList({ filter }: MarketListProps) {
     )
   }
 
+  // Show error state
+  if (error) {
+    return (
+      <div className="empty-state">
+        <div className="empty-icon">⚠️</div>
+        <div className="empty-title">Error loading markets</div>
+        <div className="empty-text">{error}</div>
+        <button 
+          className="btn btn-primary" 
+          onClick={refetch}
+          style={{ marginTop: '1rem' }}
+        >
+          Retry
+        </button>
+      </div>
+    )
+  }
+
   // Show message if contract not configured
   if (!contractConfigured) {
     return (
       <div className="empty-state">
         <div className="empty-icon">⚙️</div>
         <div className="empty-title">Contract not configured</div>
-        <div className="empty-text">Smart contract address not set</div>
+        <div className="empty-text">
+          Smart contract address not set.
+          <br />
+          Check NEXT_PUBLIC_MARKETS_ADDRESS environment variable.
+        </div>
       </div>
     )
   }
@@ -44,18 +66,45 @@ export function MarketList({ filter }: MarketListProps) {
     return (
       <div className="empty-state">
         <div className="empty-icon">📭</div>
-        <div className="empty-title">No markets yet</div>
+        <div className="empty-title">No {filter} markets</div>
         <div className="empty-text">
           {filter === 'open' 
-            ? 'Be the first to create a market!'
+            ? `Total markets on chain: ${marketCount}. Be the first to create an open market!`
             : 'No resolved markets to show.'}
         </div>
+        <button 
+          className="btn btn-secondary" 
+          onClick={refetch}
+          style={{ marginTop: '1rem' }}
+        >
+          🔄 Refresh
+        </button>
       </div>
     )
   }
 
   return (
     <div>
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'space-between', 
+        alignItems: 'center',
+        padding: '0.5rem 1rem',
+        fontSize: '0.875rem',
+        color: 'var(--text-secondary)'
+      }}>
+        <span>Showing {filteredMarkets.length} of {marketCount} markets</span>
+        <button 
+          className="btn btn-secondary btn-sm" 
+          onClick={refetch}
+          style={{ 
+            padding: '0.25rem 0.75rem',
+            fontSize: '0.875rem'
+          }}
+        >
+          🔄 Refresh
+        </button>
+      </div>
       {filteredMarkets.map((market, index) => (
         <MarketCard key={market.id} market={market} index={index} />
       ))}
@@ -134,4 +183,3 @@ export function MarketCard({ market, index = 0 }: { market: Market; index?: numb
     </Link>
   )
 }
-

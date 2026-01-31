@@ -20,22 +20,39 @@ export function useMarketsList() {
   const [markets, setMarkets] = useState<OnChainMarket[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [marketCount, setMarketCount] = useState(0)
+  const [error, setError] = useState<string | null>(null)
   
   const publicClient = usePublicClient()
   const contractConfigured = isContractConfigured(CONTRACTS.PREDICTION_MARKETS)
 
+  console.log('[useMarketsList] Contract:', CONTRACTS.PREDICTION_MARKETS)
+  console.log('[useMarketsList] Configured:', contractConfigured)
+  console.log('[useMarketsList] PublicClient:', !!publicClient)
+
   // Fetch markets
   useEffect(() => {
     const fetchAllMarkets = async () => {
-      if (!publicClient || !contractConfigured) {
+      console.log('[useMarketsList] Starting fetch...')
+      
+      if (!contractConfigured) {
+        console.error('[useMarketsList] Contract not configured!')
+        setError('Contract address not set')
         setMarkets([])
         setIsLoading(false)
         return
       }
 
+      if (!publicClient) {
+        console.log('[useMarketsList] Waiting for publicClient...')
+        return
+      }
+
       setIsLoading(true)
+      setError(null)
 
       try {
+        console.log('[useMarketsList] Reading marketCount...')
+        
         // Get market count
         const count = await publicClient.readContract({
           address: CONTRACTS.PREDICTION_MARKETS,
@@ -44,19 +61,23 @@ export function useMarketsList() {
         }) as bigint
 
         const countNum = Number(count)
+        console.log('[useMarketsList] Market count:', countNum)
         setMarketCount(countNum)
 
         if (countNum === 0) {
+          console.log('[useMarketsList] No markets found')
           setMarkets([])
           setIsLoading(false)
           return
         }
 
         // Fetch each market
-        const fetchedMarkets: OnChainMarket[] = []
+        const fetchedMarkets: OnChainMarket[]= []
 
         for (let i = 1; i <= countNum; i++) {
           try {
+            console.log(`[useMarketsList] Fetching market ${i}...`)
+            
             const data = await publicClient.readContract({
               address: CONTRACTS.PREDICTION_MARKETS,
               abi: PREDICTION_MARKETS_ABI,
@@ -65,6 +86,8 @@ export function useMarketsList() {
             }) as [string, bigint, boolean, boolean, bigint, bigint]
 
             const [question, deadline, resolved, outcomeYes, yesPool, noPool] = data
+            
+            console.log(`[useMarketsList] Market ${i}:`, question)
             
             const deadlineMs = Number(deadline) * 1000
             const now = Date.now()
@@ -87,15 +110,18 @@ export function useMarketsList() {
               status,
             })
           } catch (err) {
-            console.error(`Error fetching market ${i}:`, err)
+            console.error(`[useMarketsList] Error fetching market ${i}:`, err)
+            setError(`Failed to fetch market ${i}`)
           }
         }
 
         // Newest first
         fetchedMarkets.sort((a, b) => b.id - a.id)
+        console.log(`[useMarketsList] Fetched ${fetchedMarkets.length} markets`)
         setMarkets(fetchedMarkets)
       } catch (err) {
-        console.error('Error fetching markets:', err)
+        console.error('[useMarketsList] Error fetching markets:', err)
+        setError(err instanceof Error ? err.message : 'Failed to fetch markets')
       } finally {
         setIsLoading(false)
       }
@@ -103,8 +129,8 @@ export function useMarketsList() {
 
     fetchAllMarkets()
     
-    // Refetch every 10 seconds
-    const interval = setInterval(fetchAllMarkets, 10000)
+    // Refetch every 5 seconds (faster refresh)
+    const interval = setInterval(fetchAllMarkets, 5000)
     return () => clearInterval(interval)
   }, [publicClient, contractConfigured])
 
@@ -112,11 +138,11 @@ export function useMarketsList() {
     markets,
     isLoading,
     marketCount,
+    error,
     contractConfigured,
     refetch: () => {
-      // Trigger re-render by updating a dummy state
       setIsLoading(true)
+      // Will re-run useEffect
     },
   }
 }
-
