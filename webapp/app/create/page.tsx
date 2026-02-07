@@ -43,12 +43,15 @@ export default function CreateMarket() {
 
   const handleSubmit = async () => {
     if (!isValid || !isConnected) return
-    
+
     setIsSubmitting(true)
-    
+
     try {
       // Create market on-chain via smart contract
-      const deadlineTimestamp = new Date(deadline).getTime()
+      // Set deadline to end of day (23:59:59) to avoid past timestamp issues
+      const deadlineDate = new Date(deadline)
+      deadlineDate.setHours(23, 59, 59, 999)
+      const deadlineTimestamp = deadlineDate.getTime()
       await createMarket(question, deadlineTimestamp)
       // Transaction submitted - useEffect will handle success
     } catch (error) {
@@ -71,7 +74,7 @@ export default function CreateMarket() {
             <div className="empty-icon">🔐</div>
             <div className="empty-title">Connect Wallet</div>
             <div className="empty-text">Connect your Base wallet to create a market.</div>
-            <button 
+            <button
               className="btn btn-primary btn-press"
               onClick={() => connect({ connector: connectors[0] })}
             >
@@ -132,7 +135,7 @@ export default function CreateMarket() {
   return (
     <div className="app">
       <Header />
-      
+
       <main className="app-content with-bottom-nav">
         <div className="page-header">
           <Link href="/" className="back-btn">←</Link>
@@ -309,11 +312,11 @@ export default function CreateMarket() {
               </div>
             </div>
 
-            <div style={{ 
-              background: 'var(--bg-secondary)', 
-              padding: '16px', 
+            <div style={{
+              background: 'var(--bg-secondary)',
+              padding: '16px',
               borderRadius: '12px',
-              marginBottom: '20px' 
+              marginBottom: '20px'
             }}>
               <div style={{ fontSize: '14px', marginBottom: '12px', color: 'var(--text-secondary)' }}>
                 You're creating this market with:

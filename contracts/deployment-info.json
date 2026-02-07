@@ -1,0 +1,10 @@
+{
+  "contractAddress": "0xB4219EE9b7b49d6Cc961F66c1962eDA692f5F551",
+  "network": "baseSepolia",
+  "chainId": 84532,
+  "deployer": "0xEC611cd89b2C2f713e219f706Cf0A93B94114854",
+  "timestamp": "2026-02-07T19:36:23.666Z",
+  "usdcAddress": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+  "minBetSize": "1.0",
+  "maxBetSize": "1000.0"
+}
